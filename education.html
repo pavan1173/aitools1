@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education AI Tools - AI Tools Hub</title>
+    <meta name="description" content="Discover the best AI tools for education, learning, and academic success. Curated collection of AI-powered educational applications.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Additional custom animations for education page */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(99, 102, 241, 0.6); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .floating { animation: float 3s ease-in-out infinite; }
+        .glowing { animation: glow 2s ease-in-out infinite; }
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        .tool-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .tool-card:hover .tool-icon::before {
+            left: 100%;
+        }
+        
+        .tool-card:hover .tool-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .stagger-animation > * {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+        .stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+        .stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+        .stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+        .stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
+        .stagger-animation > *:nth-child(6) { animation-delay: 0.6s; }
+        .stagger-animation > *:nth-child(7) { animation-delay: 0.7s; }
+        .stagger-animation > *:nth-child(8) { animation-delay: 0.8s; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(-45deg, 
+                #667eea, #764ba2, #f093fb, #f5576c, 
+                #4facfe, #00f2fe, #ff9a9e, #fecfef,
+                #a8edea, #fed6e3, #d299c2, #fef9d7
+            );
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: heroPulse 6s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes heroPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Enhanced Card Styles */
+        .card-modern {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        
+        .card-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .card-modern:hover::before {
+            left: 100%;
+        }
+        
+        .card-modern:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 font-inter transition-colors duration-300">
+    <!-- Navigation Header -->
+    <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50 animate-fade-in">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center animate-pulse">
+                        <i class="fas fa-graduation-cap text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <a href="index.html" class="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 transition-colors">AI Tools Hub</a>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Education Focus</p>
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html#home" class="nav-link">Home</a>
+                    <a href="index.html#tools" class="nav-link">Tools</a>
+                    <a href="index.html#categories" class="nav-link">Categories</a>
+                    <a href="education.html?category=education" class="nav-link text-blue-600 dark:text-blue-400 font-semibold">Education</a>
+                    <a href="index.html#about" class="nav-link">About</a>
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                </div>
+                
+                <!-- Dark Mode Toggle & Mobile Menu -->
+                <div class="flex items-center space-x-4">
+                    <button id="darkModeToggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors animate-bounce">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button id="mobileMenuToggle" class="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-700">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+            <div class="px-4 py-2 space-y-1">
+                <a href="index.html#home" class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Home</a>
+                <a href="index.html#tools" class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Tools</a>
+                <a href="index.html#categories" class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Categories</a>
+                <a href="education.html?category=education" class="block px-3 py-2 rounded-md text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20">Education</a>
+                <a href="index.html#about" class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">About</a>
+                <a href="index.html#contact" class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Enhanced Hero Section -->
+    <section class="hero-gradient text-white py-24 relative overflow-hidden">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="animate-fade-in">
+                <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight font-poppins" style="text-shadow: 0 0 30px rgba(255,255,255,0.3);">
+                    AI-Powered
+                    <span class="text-yellow-300 animate-pulse font-orbitron">Education</span>
+                    Revolution
+                </h1>
+                <p class="text-xl md:text-2xl mb-10 text-blue-100 max-w-4xl mx-auto animate-slide-up font-poppins" style="text-shadow: 0 0 15px rgba(255,255,255,0.2);">
+                    Transform your learning journey with cutting-edge AI tools designed for students, educators, and lifelong learners.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-6 justify-center animate-zoom-in">
+                    <button class="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white text-lg px-10 py-5 rounded-2xl font-bold font-poppins transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
+                        <i class="fas fa-rocket mr-3"></i>
+                        Explore Tools
+                    </button>
+                    <button class="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white text-lg px-10 py-5 rounded-2xl font-bold font-poppins transition-all duration-300 transform hover:scale-105 hover:shadow-2xl">
+                        <i class="fas fa-play mr-3"></i>
+                        Watch Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Enhanced Floating Elements -->
+        <div class="absolute top-20 left-10 w-24 h-24 bg-white/10 rounded-full animate-floating"></div>
+        <div class="absolute top-40 right-20 w-20 h-20 bg-yellow-300/20 rounded-full animate-floating" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-20 left-1/4 w-16 h-16 bg-purple-300/20 rounded-full animate-floating" style="animation-delay: 2s;"></div>
+        <div class="absolute top-60 right-1/3 w-18 h-18 bg-blue-300/20 rounded-full animate-floating" style="animation-delay: 3s;"></div>
+        <div class="absolute bottom-40 right-10 w-14 h-14 bg-pink-300/20 rounded-full animate-floating" style="animation-delay: 4s;"></div>
+    </section>
+
+    <!-- Featured Education Tools Section -->
+    <section class="py-16 bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 animate-fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                    Featured
+                    <span class="text-gradient">Education Tools</span>
+                </h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                    Hand-picked AI tools that are revolutionizing education and learning.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 stagger-animation">
+                <!-- QuillBot -->
+                <div class="card-modern tool-card hover:animate-glow">
+                    <div class="tool-icon bg-gradient-to-br from-green-500 to-teal-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-feather-alt text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center font-poppins">QuillBot</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-6 font-poppins leading-relaxed">
+                        AI-powered paraphrasing and writing tool that helps improve academic writing, grammar, and style with intelligent suggestions.
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <span class="bg-gradient-to-r from-green-500 to-teal-600 text-white px-4 py-2 rounded-full text-sm font-medium">Writing</span>
+                        <a href="https://quillbot.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>Visit
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Khan Academy AI -->
+                <div class="card-modern tool-card hover:animate-glow">
+                    <div class="tool-icon bg-gradient-to-br from-blue-500 to-purple-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-graduation-cap text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center font-poppins">Khan Academy AI</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-6 font-poppins leading-relaxed">
+                        Personalized learning with AI-powered tutoring, practice problems, and step-by-step guidance across all subjects.
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <span class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium">Tutoring</span>
+                        <a href="https://www.khanacademy.org/khan-labs" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>Visit
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Gradescope -->
+                <div class="card-modern tool-card hover:animate-glow">
+                    <div class="tool-icon bg-gradient-to-br from-blue-500 to-cyan-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-chart-bar text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center font-poppins">Gradescope</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-6 font-poppins leading-relaxed">
+                        AI-assisted grading and feedback platform that streamlines assignment evaluation and provides detailed insights.
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <span class="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-4 py-2 rounded-full text-sm font-medium">Grading</span>
+                        <a href="https://gradescope.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>Visit
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Photomath -->
+                <div class="card-modern tool-card hover:animate-glow">
+                    <div class="tool-icon bg-gradient-to-br from-red-500 to-orange-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-calculator text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center font-poppins">Photomath</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-6 font-poppins leading-relaxed">
+                        AI-powered math problem solver that scans and solves mathematical problems with step-by-step explanations.
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <span class="bg-gradient-to-r from-red-500 to-orange-600 text-white px-4 py-2 rounded-full text-sm font-medium">Math</span>
+                        <a href="https://photomath.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>Visit
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Socratic by Google -->
+                <div class="card-modern tool-card hover:animate-glow">
+                    <div class="tool-icon bg-gradient-to-br from-blue-500 to-indigo-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-search text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center font-poppins">Socratic by Google</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-6 font-poppins leading-relaxed">
+                        AI-powered homework helper that provides answers, explanations, and learning resources for academic questions.
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <span class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-medium">Homework</span>
+                        <a href="https://socratic.org" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>Visit
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Duolingo -->
+                <div class="card-modern tool-card hover:animate-glow">
+                    <div class="tool-icon bg-gradient-to-br from-green-500 to-emerald-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-language text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center font-poppins">Duolingo</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-6 font-poppins leading-relaxed">
+                        AI-driven language learning platform with personalized lessons, adaptive feedback, and gamified learning experience.
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <span class="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-full text-sm font-medium">Languages</span>
+                        <a href="https://duolingo.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>Visit
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Wolfram Alpha -->
+                <div class="card-modern tool-card hover:animate-glow">
+                    <div class="tool-icon bg-gradient-to-br from-orange-500 to-red-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-calculator text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center font-poppins">Wolfram Alpha</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-6 font-poppins leading-relaxed">
+                        Computational knowledge engine for math, science, engineering, and more with step-by-step solutions.
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <span class="bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-2 rounded-full text-sm font-medium">Computing</span>
+                        <a href="https://wolframalpha.com" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>Visit
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Otter.ai -->
+                <div class="card-modern tool-card hover:animate-glow">
+                    <div class="tool-icon bg-gradient-to-br from-purple-500 to-pink-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-microphone text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center font-poppins">Otter.ai</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-6 font-poppins leading-relaxed">
+                        AI-powered transcription and note-taking tool for lectures, meetings, and study sessions with real-time transcription.
+                    </p>
+                    <div class="flex justify-between items-center">
+                        <span class="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-medium">Transcription</span>
+                        <a href="https://otter.ai" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>Visit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Paths Section -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 animate-fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                    Choose Your
+                    <span class="text-gradient">Learning Path</span>
+                </h2>
+                <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                    Tailored AI tool recommendations based on your educational goals and learning style.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger">
+                <!-- K-12 Students -->
+                <div class="card-modern animate-fade-in-left">
+                    <div class="category-icon bg-gradient-to-br from-blue-500 to-purple-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-child text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center font-poppins">K-12 Students</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-6 font-poppins leading-relaxed">AI tools designed for elementary and high school students to enhance learning and academic performance.</p>
+                    <div class="flex justify-center space-x-6 text-sm text-gray-500 dark:text-gray-400 font-poppins">
+                        <span class="flex items-center">
+                            <i class="fas fa-tools mr-2"></i>
+                            15+ Tools
+                        </span>
+                        <span class="flex items-center">
+                            <i class="fas fa-star mr-2"></i>
+                            4.8 Rating
+                        </span>
+                    </div>
+                </div>
+
+                <!-- College Students -->
+                <div class="card-modern animate-fade-in">
+                    <div class="category-icon bg-gradient-to-br from-green-500 to-emerald-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-university text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center font-poppins">College Students</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-6 font-poppins leading-relaxed">Advanced AI tools for research, writing, and complex academic projects at the university level.</p>
+                    <div class="flex justify-center space-x-6 text-sm text-gray-500 dark:text-gray-400 font-poppins">
+                        <span class="flex items-center">
+                            <i class="fas fa-tools mr-2"></i>
+                            20+ Tools
+                        </span>
+                        <span class="flex items-center">
+                            <i class="fas fa-star mr-2"></i>
+                            4.7 Rating
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Educators -->
+                <div class="card-modern animate-fade-in-right">
+                    <div class="category-icon bg-gradient-to-br from-purple-500 to-pink-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-chalkboard-teacher text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center font-poppins">Educators</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-center mb-6 font-poppins leading-relaxed">AI tools for teachers and professors to create engaging content, assess students, and enhance teaching methods.</p>
+                    <div class="flex justify-center space-x-6 text-sm text-gray-500 dark:text-gray-400 font-poppins">
+                        <span class="flex items-center">
+                            <i class="fas fa-tools mr-2"></i>
+                            18+ Tools
+                        </span>
+                        <span class="flex items-center">
+                            <i class="fas fa-star mr-2"></i>
+                            4.6 Rating
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="btn btn-primary fixed bottom-8 right-8 w-12 h-12 rounded-full z-50 opacity-0 invisible transition-all duration-300">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Logger Panel -->
+    <div id="logPanel" class="log-panel">
+        <div class="log-panel-header">
+            <div class="text-sm font-semibold">Activity Log</div>
+            <button id="logToggle" class="text-xs px-2 py-1 rounded bg-gray-200 dark:bg-gray-700">Hide</button>
+        </div>
+        <div class="log-panel-body" id="logBody"></div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/app.js"></script>
+    
+    <!-- Custom Education Page Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Back to top button functionality
+            const backToTopBtn = document.getElementById('backToTop');
+            if (backToTopBtn) {
+                window.addEventListener('scroll', () => {
+                    if (window.pageYOffset > 300) {
+                        backToTopBtn.classList.remove('opacity-0', 'invisible');
+                        backToTopBtn.classList.add('opacity-100', 'visible');
+                    } else {
+                        backToTopBtn.classList.add('opacity-0', 'invisible');
+                        backToTopBtn.classList.remove('opacity-100', 'visible');
+                    }
+                });
+                
+                backToTopBtn.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            // Add hover effects to cards
+            document.querySelectorAll('.tool-card, .category-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-12px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Animate elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in');
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all sections
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

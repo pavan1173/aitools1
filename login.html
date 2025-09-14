@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - OGTools | AI Tools Hub</title>
+    <meta name="description" content="Sign in to OGTools to access personalized AI tools, save favorites, and unlock premium features.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <style>
+        /* Enhanced Background */
+        .login-bg {
+            background: linear-gradient(-45deg, 
+                #667eea, #764ba2, #f093fb, #f5576c, 
+                #4facfe, #00f2fe, #ff9a9e, #fecfef,
+                #a8edea, #fed6e3, #d299c2, #fef9d7
+            );
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            animation: heroPulse 6s ease-in-out infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes heroPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Login Card Styles */
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .login-card:hover::before {
+            left: 100%;
+        }
+        
+        /* Form Input Styles */
+        .form-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 15px 20px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Button Styles */
+        .auth-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 15px 25px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .auth-btn:hover::before {
+            left: 100%;
+        }
+        
+        /* Social Login Buttons */
+        .google-btn {
+            background: linear-gradient(135deg, #4285f4, #34a853);
+            border: none;
+        }
+        
+        .google-btn:hover {
+            background: linear-gradient(135deg, #3367d6, #2d8f47);
+        }
+        
+        .facebook-btn {
+            background: linear-gradient(135deg, #1877f2, #42a5f5);
+            border: none;
+        }
+        
+        .facebook-btn:hover {
+            background: linear-gradient(135deg, #166fe5, #1e88e5);
+        }
+        
+        .apple-btn {
+            background: linear-gradient(135deg, #000000, #333333);
+            border: none;
+        }
+        
+        .apple-btn:hover {
+            background: linear-gradient(135deg, #1a1a1a, #4a4a4a);
+        }
+        
+        /* Phone Input Styles */
+        .phone-input {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 15px 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .country-select {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            margin-right: 10px;
+            outline: none;
+        }
+        
+        .country-select option {
+            background: #333;
+            color: white;
+        }
+        
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-element:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .floating-element:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+        
+        .floating-element:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+        
+        .floating-element:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 40%;
+            right: 30%;
+            animation-delay: 1s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        /* OTP Input Styles */
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin: 0 5px;
+        }
+        
+        .otp-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* Loading Animation */
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Success/Error Messages */
+        .message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .success-message {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            color: #10b981;
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #ef4444;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-card {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+            
+            .floating-element {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="login-bg min-h-screen flex items-center justify-center p-4">
+    <!-- Floating Elements -->
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    
+    <!-- Login Container -->
+    <div class="w-full max-w-md">
+        <!-- Logo and Header -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center mb-6">
+                <img 
+                    src="assets/oglogo.jpg" 
+                    alt="OGtools Logo" 
+                    class="w-16 h-16 rounded-2xl shadow-xl border-4 border-orange-400 hover:border-yellow-400 transition-all duration-300 bg-white/80"
+                    style="object-fit: cover;"
+                />
+            </div>
+            <h1 class="text-4xl font-bold text-white font-orbitron mb-2" style="text-shadow: 0 0 20px rgba(255,255,255,0.3);">
+                Welcome to <span class="text-yellow-300">OGtools</span>
+            </h1>
+            <p class="text-white/80 font-poppins">Sign in to access your personalized AI tools</p>
+        </div>
+        
+        <!-- Login Card -->
+        <div class="login-card p-8">
+            <!-- Tab Navigation -->
+            <div class="flex mb-8 bg-white/10 rounded-15 p-1">
+                <button id="emailTab" class="flex-1 py-3 px-4 rounded-12 text-white font-medium transition-all duration-300 bg-white/20">
+                    <i class="fas fa-envelope mr-2"></i>Email
+                </button>
+                <button id="phoneTab" class="flex-1 py-3 px-4 rounded-12 text-white/70 font-medium transition-all duration-300">
+                    <i class="fas fa-phone mr-2"></i>Phone
+                </button>
+                <button id="socialTab" class="flex-1 py-3 px-4 rounded-12 text-white/70 font-medium transition-all duration-300">
+                    <i class="fas fa-users mr-2"></i>Social
+                </button>
+            </div>
+            
+            <!-- Messages -->
+            <div id="messageContainer"></div>
+            
+            <!-- Email Login Form -->
+            <div id="emailForm" class="space-y-6">
+                <div>
+                    <label class="block text-white/90 text-sm font-medium mb-2 font-poppins">Email Address</label>
+                    <input type="email" id="email" class="form-input w-full" placeholder="Enter your email">
+                </div>
+                <div>
+                    <label class="block text-white/90 text-sm font-medium mb-2 font-poppins">Password</label>
+                    <div class="relative">
+                        <input type="password" id="password" class="form-input w-full pr-12" placeholder="Enter your password">
+                        <button type="button" id="togglePassword" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/70 hover:text-white">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center text-white/90 text-sm">
+                        <input type="checkbox" id="rememberMe" class="mr-2 rounded">
+                        Remember me
+                    </label>
+                    <a href="#" class="text-yellow-300 hover:text-yellow-400 text-sm font-medium">Forgot password?</a>
+                </div>
+                <button id="emailLoginBtn" class="auth-btn w-full py-4 text-lg font-bold">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+                </button>
+                <div class="text-center">
+                    <span class="text-white/70 text-sm">Don't have an account? </span>
+                    <a href="#" id="showRegister" class="text-yellow-300 hover:text-yellow-400 font-medium">Sign up</a>
+                </div>
+            </div>
+            
+            <!-- Phone Login Form -->
+            <div id="phoneForm" class="space-y-6 hidden">
+                <div>
+                    <label class="block text-white/90 text-sm font-medium mb-2 font-poppins">Phone Number</label>
+                    <div class="phone-input">
+                        <select id="countryCode" class="country-select">
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+91">🇮🇳 +91</option>
+                            <option value="+86">🇨🇳 +86</option>
+                            <option value="+81">🇯🇵 +81</option>
+                            <option value="+49">🇩🇪 +49</option>
+                            <option value="+33">🇫🇷 +33</option>
+                            <option value="+39">🇮🇹 +39</option>
+                            <option value="+34">🇪🇸 +34</option>
+                            <option value="+55">🇧🇷 +55</option>
+                        </select>
+                        <input type="tel" id="phoneNumber" class="form-input flex-1 border-none p-0" placeholder="Enter phone number">
+                    </div>
+                </div>
+                <button id="sendOTPBtn" class="auth-btn w-full py-4 text-lg font-bold">
+                    <i class="fas fa-paper-plane mr-2"></i>Send OTP
+                </button>
+                
+                <!-- OTP Verification -->
+                <div id="otpSection" class="hidden space-y-6">
+                    <div>
+                        <label class="block text-white/90 text-sm font-medium mb-2 font-poppins">Enter OTP</label>
+                        <div class="flex justify-center space-x-2">
+                            <input type="text" class="otp-input" maxlength="1">
+                            <input type="text" class="otp-input" maxlength="1">
+                            <input type="text" class="otp-input" maxlength="1">
+                            <input type="text" class="otp-input" maxlength="1">
+                            <input type="text" class="otp-input" maxlength="1">
+                            <input type="text" class="otp-input" maxlength="1">
+                        </div>
+                    </div>
+                    <button id="verifyOTPBtn" class="auth-btn w-full py-4 text-lg font-bold">
+                        <i class="fas fa-check mr-2"></i>Verify OTP
+                    </button>
+                    <div class="text-center">
+                        <button id="resendOTP" class="text-yellow-300 hover:text-yellow-400 text-sm font-medium">Resend OTP</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Social Login Form -->
+            <div id="socialForm" class="space-y-6 hidden">
+                <div class="space-y-4">
+                    <button id="googleLoginBtn" class="auth-btn google-btn w-full py-4 text-lg font-bold">
+                        <i class="fab fa-google mr-3"></i>Continue with Google
+                    </button>
+                    <button id="facebookLoginBtn" class="auth-btn facebook-btn w-full py-4 text-lg font-bold">
+                        <i class="fab fa-facebook-f mr-3"></i>Continue with Facebook
+                    </button>
+                    <button id="appleLoginBtn" class="auth-btn apple-btn w-full py-4 text-lg font-bold">
+                        <i class="fab fa-apple mr-3"></i>Continue with Apple
+                    </button>
+                    <button id="githubLoginBtn" class="auth-btn w-full py-4 text-lg font-bold">
+                        <i class="fab fa-github mr-3"></i>Continue with GitHub
+                    </button>
+                </div>
+                <div class="text-center">
+                    <span class="text-white/70 text-sm">By continuing, you agree to our </span>
+                    <a href="#" class="text-yellow-300 hover:text-yellow-400 text-sm font-medium">Terms of Service</a>
+                    <span class="text-white/70 text-sm"> and </span>
+                    <a href="#" class="text-yellow-300 hover:text-yellow-400 text-sm font-medium">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back to Home -->
+        <div class="text-center mt-6">
+            <a href="index.html" class="text-white/70 hover:text-white font-medium transition-colors">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Home
+            </a>
+        </div>
+    </div>
+    
+    <!-- Firebase Configuration -->
+    <script>
+        // Firebase configuration - Replace with your actual Firebase config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY_HERE",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+    </script>
+    
+    <!-- Login Script -->
+    <script>
+        class LoginManager {
+            constructor() {
+                this.currentTab = 'email';
+                this.otpSent = false;
+                this.otpCode = '';
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.setupTabSwitching();
+                this.setupOTPInputs();
+            }
+            
+            setupEventListeners() {
+                // Tab switching
+                document.getElementById('emailTab').addEventListener('click', () => this.switchTab('email'));
+                document.getElementById('phoneTab').addEventListener('click', () => this.switchTab('phone'));
+                document.getElementById('socialTab').addEventListener('click', () => this.switchTab('social'));
+                
+                // Email login
+                document.getElementById('emailLoginBtn').addEventListener('click', () => this.handleEmailLogin());
+                
+                // Phone login
+                document.getElementById('sendOTPBtn').addEventListener('click', () => this.sendOTP());
+                document.getElementById('verifyOTPBtn').addEventListener('click', () => this.verifyOTP());
+                document.getElementById('resendOTP').addEventListener('click', () => this.sendOTP());
+                
+                // Social login
+                document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleLogin());
+                document.getElementById('facebookLoginBtn').addEventListener('click', () => this.handleFacebookLogin());
+                document.getElementById('appleLoginBtn').addEventListener('click', () => this.handleAppleLogin());
+                document.getElementById('githubLoginBtn').addEventListener('click', () => this.handleGithubLogin());
+                
+                // Password toggle
+                document.getElementById('togglePassword').addEventListener('click', () => this.togglePassword());
+                
+                // Register link
+                document.getElementById('showRegister').addEventListener('click', () => this.showRegister());
+            }
+            
+            setupTabSwitching() {
+                const tabs = ['emailTab', 'phoneTab', 'socialTab'];
+                const forms = ['emailForm', 'phoneForm', 'socialForm'];
+                
+                tabs.forEach(tab => {
+                    document.getElementById(tab).addEventListener('click', () => {
+                        tabs.forEach(t => {
+                            document.getElementById(t).classList.remove('bg-white/20');
+                            document.getElementById(t).classList.add('text-white/70');
+                        });
+                        forms.forEach(f => {
+                            document.getElementById(f).classList.add('hidden');
+                        });
+                        
+                        const activeTab = tab.replace('Tab', '');
+                        document.getElementById(tab).classList.add('bg-white/20');
+                        document.getElementById(tab).classList.remove('text-white/70');
+                        document.getElementById(activeTab + 'Form').classList.remove('hidden');
+                        this.currentTab = activeTab;
+                    });
+                });
+            }
+            
+            setupOTPInputs() {
+                const otpInputs = document.querySelectorAll('.otp-input');
+                otpInputs.forEach((input, index) => {
+                    input.addEventListener('input', (e) => {
+                        if (e.target.value.length === 1 && index < otpInputs.length - 1) {
+                            otpInputs[index + 1].focus();
+                        }
+                    });
+                    
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                            otpInputs[index - 1].focus();
+                        }
+                    });
+                });
+            }
+            
+            switchTab(tab) {
+                this.currentTab = tab;
+            }
+            
+            async handleEmailLogin() {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                if (!email || !password) {
+                    this.showMessage('Please fill in all fields', 'error');
+                    return;
+                }
+                
+                this.showLoading(document.getElementById('emailLoginBtn'));
+                
+                try {
+                    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                    await this.saveUserData(userCredential.user);
+                    this.showMessage('Login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } catch (error) {
+                    this.showMessage(this.getErrorMessage(error), 'error');
+                } finally {
+                    this.hideLoading(document.getElementById('emailLoginBtn'));
+                }
+            }
+            
+            async sendOTP() {
+                const phoneNumber = document.getElementById('phoneNumber').value;
+                const countryCode = document.getElementById('countryCode').value;
+                
+                if (!phoneNumber) {
+                    this.showMessage('Please enter your phone number', 'error');
+                    return;
+                }
+                
+                this.showLoading(document.getElementById('sendOTPBtn'));
+                
+                try {
+                    // Generate random OTP for demo
+                    this.otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+                    
+                    // In real implementation, send OTP via SMS service
+                    console.log('OTP sent to', countryCode + phoneNumber, ':', this.otpCode);
+                    
+                    this.showMessage('OTP sent to your phone number', 'success');
+                    document.getElementById('otpSection').classList.remove('hidden');
+                    this.otpSent = true;
+                } catch (error) {
+                    this.showMessage('Failed to send OTP. Please try again.', 'error');
+                } finally {
+                    this.hideLoading(document.getElementById('sendOTPBtn'));
+                }
+            }
+            
+            async verifyOTP() {
+                const otpInputs = document.querySelectorAll('.otp-input');
+                const enteredOTP = Array.from(otpInputs).map(input => input.value).join('');
+                
+                if (enteredOTP.length !== 6) {
+                    this.showMessage('Please enter complete OTP', 'error');
+                    return;
+                }
+                
+                this.showLoading(document.getElementById('verifyOTPBtn'));
+                
+                try {
+                    if (enteredOTP === this.otpCode) {
+                        // Create anonymous user for phone login
+                        const userCredential = await auth.signInAnonymously();
+                        await this.saveUserData(userCredential.user, 'phone');
+                        this.showMessage('Phone verification successful! Redirecting...', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 1500);
+                    } else {
+                        this.showMessage('Invalid OTP. Please try again.', 'error');
+                    }
+                } catch (error) {
+                    this.showMessage('Verification failed. Please try again.', 'error');
+                } finally {
+                    this.hideLoading(document.getElementById('verifyOTPBtn'));
+                }
+            }
+            
+            async handleGoogleLogin() {
+                this.showLoading(document.getElementById('googleLoginBtn'));
+                
+                try {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    provider.addScope('email');
+                    provider.addScope('profile');
+                    
+                    const result = await auth.signInWithPopup(provider);
+                    await this.saveUserData(result.user, 'google');
+                    this.showMessage('Google login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } catch (error) {
+                    this.showMessage('Google login failed. Please try again.', 'error');
+                } finally {
+                    this.hideLoading(document.getElementById('googleLoginBtn'));
+                }
+            }
+            
+            async handleFacebookLogin() {
+                this.showLoading(document.getElementById('facebookLoginBtn'));
+                
+                try {
+                    const provider = new firebase.auth.FacebookAuthProvider();
+                    provider.addScope('email');
+                    
+                    const result = await auth.signInWithPopup(provider);
+                    await this.saveUserData(result.user, 'facebook');
+                    this.showMessage('Facebook login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } catch (error) {
+                    this.showMessage('Facebook login failed. Please try again.', 'error');
+                } finally {
+                    this.hideLoading(document.getElementById('facebookLoginBtn'));
+                }
+            }
+            
+            async handleAppleLogin() {
+                this.showLoading(document.getElementById('appleLoginBtn'));
+                
+                try {
+                    const provider = new firebase.auth.OAuthProvider('apple.com');
+                    provider.addScope('email');
+                    provider.addScope('name');
+                    
+                    const result = await auth.signInWithPopup(provider);
+                    await this.saveUserData(result.user, 'apple');
+                    this.showMessage('Apple login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } catch (error) {
+                    this.showMessage('Apple login failed. Please try again.', 'error');
+                } finally {
+                    this.hideLoading(document.getElementById('appleLoginBtn'));
+                }
+            }
+            
+            async handleGithubLogin() {
+                this.showLoading(document.getElementById('githubLoginBtn'));
+                
+                try {
+                    const provider = new firebase.auth.GithubAuthProvider();
+                    provider.addScope('user:email');
+                    
+                    const result = await auth.signInWithPopup(provider);
+                    await this.saveUserData(result.user, 'github');
+                    this.showMessage('GitHub login successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } catch (error) {
+                    this.showMessage('GitHub login failed. Please try again.', 'error');
+                } finally {
+                    this.hideLoading(document.getElementById('githubLoginBtn'));
+                }
+            }
+            
+            async saveUserData(user, loginMethod = 'email') {
+                const userData = {
+                    uid: user.uid,
+                    email: user.email || '',
+                    displayName: user.displayName || '',
+                    photoURL: user.photoURL || '',
+                    loginMethod: loginMethod,
+                    lastLogin: new Date(),
+                    createdAt: new Date()
+                };
+                
+                try {
+                    await db.collection('users').doc(user.uid).set(userData, { merge: true });
+                    localStorage.setItem('user', JSON.stringify(userData));
+                } catch (error) {
+                    console.error('Error saving user data:', error);
+                }
+            }
+            
+            togglePassword() {
+                const passwordInput = document.getElementById('password');
+                const toggleBtn = document.getElementById('togglePassword');
+                const icon = toggleBtn.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            }
+            
+            showRegister() {
+                // In a real app, this would show a registration form
+                this.showMessage('Registration feature coming soon!', 'success');
+            }
+            
+            showMessage(message, type) {
+                const messageContainer = document.getElementById('messageContainer');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}-message`;
+                messageDiv.textContent = message;
+                
+                messageContainer.innerHTML = '';
+                messageContainer.appendChild(messageDiv);
+                
+                setTimeout(() => {
+                    messageDiv.remove();
+                }, 5000);
+            }
+            
+            showLoading(button) {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<div class="loading-spinner"></div>';
+                button.disabled = true;
+                button.dataset.originalText = originalText;
+            }
+            
+            hideLoading(button) {
+                button.innerHTML = button.dataset.originalText;
+                button.disabled = false;
+            }
+            
+            getErrorMessage(error) {
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        return 'No account found with this email address.';
+                    case 'auth/wrong-password':
+                        return 'Incorrect password. Please try again.';
+                    case 'auth/invalid-email':
+                        return 'Invalid email address.';
+                    case 'auth/user-disabled':
+                        return 'This account has been disabled.';
+                    case 'auth/too-many-requests':
+                        return 'Too many failed attempts. Please try again later.';
+                    default:
+                        return 'An error occurred. Please try again.';
+                }
+            }
+        }
+        
+        // Initialize login manager when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new LoginManager();
+        });
+    </script>
+</body>
+</html>

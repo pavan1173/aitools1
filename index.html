@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OGtools - Your Gateway to AI-Powered Learning</title>
+    <meta name="description" content="Discover the best AI tools for students, education, business, and productivity. Curated collection of AI-powered applications to enhance your learning and work.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getStorage } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
+        
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AlzaSyCFaUobke7T2EXPhO-DYwC81B7MYHuu2_I",
+            authDomain: "ogtool-36ed2.firebaseapp.com",
+            projectId: "ogtool-36ed2",
+            storageBucket: "ogtool-36ed2.appspot.com",
+            messagingSenderId: "785065252249",
+            appId: "ogtool-36ed2"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+        
+        // Make Firebase available globally
+        window.firebase = { app, db, auth, storage };
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Three.js for 3D effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <style>
+        /* Enhanced Video Background */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            object-fit: cover;
+            filter: brightness(0.3) contrast(1.2);
+        }
+        
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, 
+                rgba(102, 126, 234, 0.9), 
+                rgba(118, 75, 162, 0.9), 
+                rgba(240, 147, 251, 0.9), 
+                rgba(245, 87, 108, 0.9), 
+                rgba(79, 172, 254, 0.9), 
+                rgba(0, 242, 254, 0.9),
+                rgba(255, 165, 0, 0.8),
+                rgba(255, 69, 0, 0.8)
+            );
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            z-index: -1;
+        }
+        
+        /* Animated Background Pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+            animation: patternMove 30s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes patternMove {
+            0%, 100% { transform: translateX(0) translateY(0) rotate(0deg); }
+            25% { transform: translateX(-20px) translateY(-10px) rotate(1deg); }
+            50% { transform: translateX(20px) translateY(10px) rotate(-1deg); }
+            75% { transform: translateX(-10px) translateY(20px) rotate(0.5deg); }
+        }
+        
+        /* Animated Background */
+        body {
+            background: #0a0a0a;
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Exo 2', sans-serif;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Floating Particles */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        .particle:nth-child(1) { width: 80px; height: 80px; top: 20%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 120px; height: 120px; top: 60%; left: 80%; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: 4s; }
+        .particle:nth-child(4) { width: 100px; height: 100px; top: 40%; left: 70%; animation-delay: 1s; }
+        .particle:nth-child(5) { width: 90px; height: 90px; top: 10%; left: 60%; animation-delay: 3s; }
+        .particle:nth-child(6) { width: 70px; height: 70px; top: 70%; left: 50%; animation-delay: 5s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        /* Animated Icons */
+        .animated-icon {
+            animation: iconPulse 2s ease-in-out infinite;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .animated-icon:hover {
+            transform: scale(1.2) rotate(10deg);
+            animation-play-state: paused;
+        }
+        
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Glowing Effects */
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+            to { box-shadow: 0 0 30px rgba(99, 102, 241, 0.6); }
+        }
+        
+        /* Shimmer Effect */
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .card-hover:hover::before {
+            left: 100%;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        /* Text Gradient Animation */
+        .text-gradient-animated {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        /* Stagger Animation */
+        .stagger-animation > * {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+        .stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+        .stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+        .stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+        .stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
+        .stagger-animation > *:nth-child(6) { animation-delay: 0.6s; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Enhanced Hero Section */
+        .hero-bg {
+            background: linear-gradient(135deg, 
+                rgba(99, 102, 241, 0.95), 
+                rgba(139, 92, 246, 0.95), 
+                rgba(236, 72, 153, 0.95),
+                rgba(255, 165, 0, 0.9),
+                rgba(255, 69, 0, 0.9)
+            );
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            animation: heroGlow 8s ease-in-out infinite;
+        }
+        
+        @keyframes heroGlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Enhanced Button Styles */
+        .btn-modern {
+            position: relative;
+            overflow: hidden;
+            border: none;
+            border-radius: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .btn-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .btn-modern:hover::before {
+            left: 100%;
+        }
+        
+        .btn-modern:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+        
+        .btn-modern:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        
+        /* Tool Icon Animations */
+        .tool-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tool-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .tool-card:hover .tool-icon::before {
+            left: 100%;
+        }
+        
+        .tool-card:hover .tool-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        /* Category Card Enhancements */
+        .category-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        
+        .category-card:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Feature Card Enhancements */
+        .feature-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        /* Enhanced Navigation */
+        .nav-link {
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 8px 16px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Font Classes */
+        .font-orbitron {
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .font-exo {
+            font-family: 'Exo 2', sans-serif;
+        }
+        
+        /* Enhanced Button Styles */
+        .btn {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.8), rgba(255, 69, 0, 0.8));
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.9), rgba(255, 69, 0, 0.9));
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.8), rgba(255, 69, 0, 0.8));
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 3D Card Effects */
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            perspective: 1000px;
+        }
+        
+        .card-3d:hover {
+            transform: rotateY(5deg) rotateX(5deg) translateZ(20px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3), 0 0 30px rgba(99, 102, 241, 0.3);
+        }
+        
+        .tool-card-3d {
+            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tool-card-3d::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        
+        .tool-card-3d:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .tool-card-3d:hover {
+            transform: translateY(-15px) rotateY(5deg) rotateX(5deg) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.2), 0 0 40px rgba(99, 102, 241, 0.2);
+        }
+        
+        /* Enhanced Tool Icons with 3D Effect */
+        .tool-icon-3d {
+            width: 100px;
+            height: 100px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .tool-icon-3d::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+        
+        .tool-card-3d:hover .tool-icon-3d::before {
+            transform: translateX(100%);
+        }
+        
+        .tool-card-3d:hover .tool-icon-3d {
+            transform: scale(1.1) rotateY(10deg) rotateX(10deg) translateZ(10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        /* Floating 3D Elements */
+        .floating-3d {
+            animation: float3D 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+        }
+        
+        @keyframes float3D {
+            0%, 100% { 
+                transform: translateY(0px) rotateY(0deg) rotateX(0deg); 
+            }
+            25% { 
+                transform: translateY(-20px) rotateY(90deg) rotateX(10deg); 
+            }
+            50% { 
+                transform: translateY(-40px) rotateY(180deg) rotateX(0deg); 
+            }
+            75% { 
+                transform: translateY(-20px) rotateY(270deg) rotateX(-10deg); 
+            }
+        }
+        
+        /* Enhanced Typography */
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .text-3d {
+            text-shadow: 
+                0 1px 0 #ccc,
+                0 2px 0 #c9c9c9,
+                0 3px 0 #bbb,
+                0 4px 0 #b9b9b9,
+                0 5px 0 #aaa,
+                0 6px 1px rgba(0,0,0,.1),
+                0 0 5px rgba(0,0,0,.1),
+                0 1px 3px rgba(0,0,0,.3),
+                0 3px 5px rgba(0,0,0,.2),
+                0 5px 10px rgba(0,0,0,.25),
+                0 10px 10px rgba(0,0,0,.2),
+                0 20px 20px rgba(0,0,0,.15);
+        }
+        
+        /* Glassmorphism Effects */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Enhanced Button Styles */
+        .btn-3d {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn-3d:hover {
+            transform: translateY(-3px) rotateX(5deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        }
+        
+        .btn-3d:active {
+            transform: translateY(-1px) rotateX(2deg);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Logo Styles */
+        .tool-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tool-logo:hover {
+            transform: scale(1.1) rotateY(10deg);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .particle {
+                display: none;
+            }
+            
+            .hero-bg {
+                padding: 2rem 0;
+            }
+            
+            .video-background {
+                display: none;
+            }
+            
+            .card-3d:hover {
+                transform: translateY(-5px) scale(1.02);
+            }
+            
+            .tool-card-3d:hover {
+                transform: translateY(-8px) scale(1.01);
+            }
+        }
+    </style>
+</head>
+<body class="font-inter transition-colors duration-300">
+    <!-- Enhanced Background -->
+    <video class="video-background" autoplay muted loop>
+        <source src="../server/assets/ogtools.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+    <div class="bg-pattern"></div>
+    
+    <!-- Enhanced Floating Particles -->
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+    <!-- Navigation Header -->
+    <nav class="bg-white/20 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-white/30">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <img 
+                        src="../server/assets/oglogo.jpg" 
+                        alt="OGtools Logo" 
+                        class="w-16 h-16 rounded-2xl shadow-xl animated-icon border-4 border-orange-400 hover:border-yellow-400 transition-all duration-300 bg-white/80"
+                        style="object-fit: cover;"
+                    />
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-white font-orbitron flex items-center" style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">
+                        <span class="text-red-500 mr-1">OG</span>tools
+                    </h1>
+                    <p class="text-xs text-orange-200 font-exo">For Students & Professionals</p>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html#home" class="nav-link text-white hover:text-yellow-300">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="index.html#tools" class="nav-link text-white hover:text-yellow-300">
+                        <i class="fas fa-tools mr-2"></i>Tools
+                    </a>
+                    <a href="index.html#categories" class="nav-link text-white hover:text-yellow-300">
+                        <i class="fas fa-th-large mr-2"></i>Categories
+                    </a>
+                    <a href="education.html?category=education" class="nav-link text-white hover:text-yellow-300">
+                        <i class="fas fa-graduation-cap mr-2"></i>Education
+                    </a>
+                    <a href="index.html#about" class="nav-link text-white hover:text-yellow-300">
+                        <i class="fas fa-info-circle mr-2"></i>About
+                    </a>
+                    <a href="index.html#contact" class="nav-link text-white hover:text-yellow-300">
+                        <i class="fas fa-envelope mr-2"></i>Contact
+                    </a>
+                    <a href="login.html" id="loginBtn" class="nav-link text-white hover:text-yellow-300 bg-white/20 px-4 py-2 rounded-lg">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </a>
+                </div>
+                
+                <!-- Dark Mode Toggle & Mobile Menu -->
+                <div class="flex items-center space-x-4">
+                    <button id="darkModeToggle" class="p-2 rounded-lg bg-white/20 hover:bg-white/30 text-white transition-colors animated-icon">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button id="mobileMenuToggle" class="md:hidden p-2 rounded-lg bg-white/20 hover:bg-white/30 text-white">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white/20 backdrop-blur-md border-t border-white/30">
+            <div class="px-4 py-2 space-y-1">
+                <a href="index.html#home" class="block px-3 py-2 rounded-md text-white hover:bg-white/20">
+                    <i class="fas fa-home mr-3"></i>Home
+                </a>
+                <a href="index.html#tools" class="block px-3 py-2 rounded-md text-white hover:bg-white/20">
+                    <i class="fas fa-tools mr-3"></i>Tools
+                </a>
+                <a href="index.html#categories" class="block px-3 py-2 rounded-md text-white hover:bg-white/20">
+                    <i class="fas fa-th-large mr-3"></i>Categories
+                </a>
+                <a href="education.html?category=education" class="block px-3 py-2 rounded-md text-white hover:bg-white/20">
+                    <i class="fas fa-graduation-cap mr-3"></i>Education
+                </a>
+                <a href="index.html#about" class="block px-3 py-2 rounded-md text-white hover:bg-white/20">
+                    <i class="fas fa-info-circle mr-3"></i>About
+                </a>
+                <a href="index.html#contact" class="block px-3 py-2 rounded-md text-white hover:bg-white/20">
+                    <i class="fas fa-envelope mr-3"></i>Contact
+                </a>
+                <a href="login.html" id="mobileLoginBtn" class="block px-3 py-2 rounded-md text-white hover:bg-white/20 bg-white/20">
+                    <i class="fas fa-sign-in-alt mr-3"></i>Login
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Menu Container -->
+    <div id="userMenu" style="display: none;"></div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg text-white py-20 relative">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="animate-fade-in">
+                <h1 class="text-4xl md:text-7xl font-bold mb-6 leading-tight font-poppins text-3d" style="text-shadow: 0 0 20px rgba(255,255,255,0.3);">
+                    Discover AI Tools That
+                    <span class="text-gradient-animated animate-pulse font-orbitron floating-3d">Transform Learning</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 text-orange-100 max-w-3xl mx-auto animate-slide-up font-poppins" style="text-shadow: 0 0 10px rgba(255,255,255,0.2);">
+                    Curated collection of the best AI-powered tools for students, educators, and professionals. 
+                    Boost your productivity and accelerate your learning journey.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-6 justify-center animate-zoom-in">
+                    <button class="btn-modern bg-gradient-to-r from-orange-500 to-red-500 text-white text-lg px-10 py-5 font-poppins font-bold">
+                        <i class="fas fa-rocket mr-3 animated-icon"></i>
+                        Explore Tools
+                    </button>
+                    <button class="btn-modern bg-gradient-to-r from-blue-500 to-purple-500 text-white text-lg px-10 py-5 font-poppins font-bold">
+                        <i class="fas fa-play mr-3 animated-icon"></i>
+                        Watch Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 3D Floating Elements -->
+        <div class="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full floating-3d"></div>
+        <div class="absolute top-40 right-20 w-16 h-16 bg-yellow-300/20 rounded-full floating-3d" style="animation-delay: 1s;"></div>
+        <div class="absolute bottom-20 left-1/4 w-12 h-12 bg-purple-300/20 rounded-full floating-3d" style="animation-delay: 2s;"></div>
+        <div class="absolute top-60 right-1/3 w-14 h-14 bg-blue-300/20 rounded-full floating-3d" style="animation-delay: 3s;"></div>
+    </section>
+
+    <!-- Search and Filter Section -->
+    <section id="tools" class="py-16 bg-white/20 backdrop-blur-md">   
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 animate-fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 font-orbitron" style="text-shadow: 0 0 15px rgba(255,255,255,0.3);">
+                    Find Your Perfect
+                    <span class="text-gradient-animated font-orbitron">AI Tool</span>
+                </h2>
+                <p class="text-lg text-orange-100 max-w-2xl mx-auto font-exo" style="text-shadow: 0 0 10px rgba(255,255,255,0.2);">
+                    Search through our curated collection of AI tools organized by category and use case.
+                </p>
+            </div>
+            
+            <!-- Search Bar -->
+            <div class="max-w-2xl mx-auto mb-8 animate-slide-up">
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Search AI tools, categories, or features..."
+                        class="w-full px-6 py-4 pl-12 pr-4 text-lg border border-white/50 rounded-xl bg-white/30 backdrop-blur-md text-white placeholder-orange-200 focus:ring-2 focus:ring-yellow-400 focus:border-transparent shimmer font-exo"
+                    >
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-200 animated-icon"></i>
+                </div>
+            </div>
+            
+            <!-- Category Filters -->
+            <div id="categoryFilters" class="flex flex-wrap justify-center gap-3 mb-8 stagger-animation">
+                <!-- Categories will be populated by JavaScript -->
+            </div>
+            
+            <!-- Tools Grid -->
+            <div id="toolsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 stagger-animation">
+                <!-- Tools will be populated by JavaScript -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-12">
+                <i class="fas fa-search text-6xl text-white/50 mb-4 animated-icon"></i>
+                <h3 class="text-xl font-semibold text-white/80 mb-2">No tools found</h3>
+                <p class="text-blue-200">Try adjusting your search or filter criteria</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="py-16 bg-white/15 backdrop-blur-md">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 animate-fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 font-orbitron" style="text-shadow: 0 0 15px rgba(255,255,255,0.3);">
+                    Explore by
+                    <span class="text-gradient-animated font-orbitron">Category</span>
+                </h2>
+                <p class="text-lg text-orange-100 max-w-2xl mx-auto font-exo" style="text-shadow: 0 0 10px rgba(255,255,255,0.2);">
+                    Browse AI tools organized by your specific needs and interests.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
+                <!-- Education Category -->
+                <div class="category-card card-hover card-3d group p-8 rounded-2xl glass-card">
+                    <div class="category-icon bg-gradient-to-br from-blue-500 to-purple-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 animated-icon floating-3d">
+                        <i class="fas fa-graduation-cap text-white text-3xl"></i>
+                    </div>
+                    <h3 class="category-title text-white text-2xl font-bold mb-3 text-center font-poppins" style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">Education</h3>
+                    <p class="category-description text-orange-100 text-center mb-6 font-poppins text-lg">AI tools for learning, tutoring, research, and academic success.</p>
+                    <div class="category-stats flex justify-center space-x-6 text-sm text-orange-200 font-poppins">
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-tools mr-2"></i>
+                            25+ Tools
+                        </span>
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-star mr-2"></i>
+                            4.8 Rating
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Business Category -->
+                <div class="category-card card-hover card-3d group p-8 rounded-2xl glass-card">
+                    <div class="category-icon bg-gradient-to-br from-green-500 to-emerald-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 animated-icon floating-3d">
+                        <i class="fas fa-briefcase text-white text-3xl"></i>
+                    </div>
+                    <h3 class="category-title text-white text-2xl font-bold mb-3 text-center font-poppins" style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">Business</h3>
+                    <p class="category-description text-orange-100 text-center mb-6 font-poppins text-lg">AI solutions for business operations, marketing, and productivity.</p>
+                    <div class="category-stats flex justify-center space-x-6 text-sm text-orange-200 font-poppins">
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-tools mr-2"></i>
+                            18+ Tools
+                        </span>
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-star mr-2"></i>
+                            4.7 Rating
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Productivity Category -->
+                <div class="category-card card-hover card-3d group p-8 rounded-2xl glass-card">
+                    <div class="category-icon bg-gradient-to-br from-purple-500 to-pink-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 animated-icon floating-3d">
+                        <i class="fas fa-tasks text-white text-3xl"></i>
+                    </div>
+                    <h3 class="category-title text-white text-2xl font-bold mb-3 text-center font-poppins" style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">Productivity</h3>
+                    <p class="category-description text-orange-100 text-center mb-6 font-poppins text-lg">AI-powered tools to boost efficiency and streamline workflows.</p>
+                    <div class="category-stats flex justify-center space-x-6 text-sm text-orange-200 font-poppins">
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-tools mr-2"></i>
+                            22+ Tools
+                        </span>
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-star mr-2"></i>
+                            4.9 Rating
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Coding Category -->
+                <div class="category-card card-hover card-3d group p-8 rounded-2xl glass-card">
+                    <div class="category-icon bg-gradient-to-br from-orange-500 to-red-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 animated-icon floating-3d">
+                        <i class="fas fa-code text-white text-3xl"></i>
+                    </div>
+                    <h3 class="category-title text-white text-2xl font-bold mb-3 text-center font-poppins" style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">Coding</h3>
+                    <p class="category-description text-orange-100 text-center mb-6 font-poppins text-lg">AI assistants for programming, debugging, and code generation.</p>
+                    <div class="category-stats flex justify-center space-x-6 text-sm text-orange-200 font-poppins">
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-tools mr-2"></i>
+                            15+ Tools
+                        </span>
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-star mr-2"></i>
+                            4.8 Rating
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Design Category -->
+                <div class="category-card card-hover card-3d group p-8 rounded-2xl glass-card">
+                    <div class="category-icon bg-gradient-to-br from-pink-500 to-rose-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 animated-icon floating-3d">
+                        <i class="fas fa-palette text-white text-3xl"></i>
+                    </div>
+                    <h3 class="category-title text-white text-2xl font-bold mb-3 text-center font-poppins" style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">Design</h3>
+                    <p class="category-description text-orange-100 text-center mb-6 font-poppins text-lg">AI tools for graphic design, presentations, and visual content.</p>
+                    <div class="category-stats flex justify-center space-x-6 text-sm text-orange-200 font-poppins">
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-tools mr-2"></i>
+                            20+ Tools
+                        </span>
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-star mr-2"></i>
+                            4.6 Rating
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Research Category -->
+                <div class="category-card card-hover card-3d group p-8 rounded-2xl glass-card">
+                    <div class="category-icon bg-gradient-to-br from-indigo-500 to-blue-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 animated-icon floating-3d">
+                        <i class="fas fa-microscope text-white text-3xl"></i>
+                    </div>
+                    <h3 class="category-title text-white text-2xl font-bold mb-3 text-center font-poppins" style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">Research</h3>
+                    <p class="category-description text-orange-100 text-center mb-6 font-poppins text-lg">AI-powered research tools for data analysis and insights.</p>
+                    <div class="category-stats flex justify-center space-x-6 text-sm text-orange-200 font-poppins">
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-tools mr-2"></i>
+                            12+ Tools
+                        </span>
+                        <span class="stat-item flex items-center">
+                            <i class="fas fa-star mr-2"></i>
+                            4.7 Rating
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white/20 backdrop-blur-md">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 animate-fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 font-orbitron" style="text-shadow: 0 0 15px rgba(255,255,255,0.3);">
+                    Why Choose
+                    <span class="text-gradient-animated font-orbitron">OGtools?</span>
+                </h2>
+                <p class="text-lg text-orange-100 max-w-2xl mx-auto font-exo" style="text-shadow: 0 0 10px rgba(255,255,255,0.2);">
+                    We make it easy to discover and use the best AI tools for your needs.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 stagger-animation">
+                <div class="feature-card text-center p-8 rounded-2xl">
+                    <div class="feature-icon bg-blue-100 dark:bg-blue-900 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 animated-icon">
+                        <i class="fas fa-filter text-blue-600 dark:text-blue-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2 font-orbitron" style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">Smart Filtering</h3>
+                    <p class="text-orange-100 font-exo">Find exactly what you need with our intelligent search and category filters.</p>
+                </div>
+                
+                <div class="feature-card text-center p-8 rounded-2xl">
+                    <div class="feature-icon bg-green-100 dark:bg-green-900 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 animated-icon">
+                        <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2 font-orbitron" style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">Curated Quality</h3>
+                    <p class="text-orange-100 font-exo">Every tool is hand-picked and tested for quality and effectiveness.</p>
+                </div>
+                
+                <div class="feature-card text-center p-8 rounded-2xl">
+                    <div class="feature-icon bg-purple-100 dark:bg-purple-900 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 animated-icon">
+                        <i class="fas fa-mobile-alt text-purple-600 dark:text-purple-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2 font-orbitron" style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">Mobile Friendly</h3>
+                    <p class="text-orange-100 font-exo">Access your favorite AI tools on any device, anywhere, anytime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-white/15 backdrop-blur-md">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto text-center animate-fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 font-orbitron" style="text-shadow: 0 0 15px rgba(255,255,255,0.3);">
+                    About
+                    <span class="text-gradient-animated font-orbitron">OGtools</span>
+                </h2>
+                <p class="text-lg text-orange-100 mb-8 leading-relaxed font-exo" style="text-shadow: 0 0 10px rgba(255,255,255,0.2);">
+                    OGTools was created by students, for students. We understand the challenges of modern education 
+                    and the power of AI to transform learning experiences. Our mission is to democratize access to 
+                    cutting-edge AI tools and help students, educators, and professionals harness the power of artificial 
+                    intelligence for better outcomes.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 stagger-animation">
+                    <div class="stat-card bg-white/25 backdrop-blur-md p-6 rounded-2xl border border-white/40">
+                        <div class="stat-number text-4xl font-bold text-white mb-2 font-orbitron" style="text-shadow: 0 0 15px rgba(255,255,255,0.3);">500+</div>
+                        <div class="stat-label text-orange-200 font-exo">AI Tools</div>
+                    </div>
+                    <div class="stat-card bg-white/25 backdrop-blur-md p-6 rounded-2xl border border-white/40">
+                        <div class="stat-number text-4xl font-bold text-white mb-2 font-orbitron" style="text-shadow: 0 0 15px rgba(255,255,255,0.3);">10K+</div>
+                        <div class="stat-label text-orange-200 font-exo">Students Helped</div>
+                    </div>
+                    <div class="stat-card bg-white/25 backdrop-blur-md p-6 rounded-2xl border border-white/40">
+                        <div class="stat-number text-4xl font-bold text-white mb-2 font-orbitron" style="text-shadow: 0 0 15px rgba(255,255,255,0.3);">50+</div>
+                        <div class="stat-label text-orange-200 font-exo">Categories</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-white/20 backdrop-blur-md">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-2xl mx-auto text-center animate-fade-in">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 font-orbitron" style="text-shadow: 0 0 15px rgba(255,255,255,0.3);">
+                    Get in
+                    <span class="text-gradient-animated font-orbitron">Touch</span>
+                </h2>
+                <p class="text-lg text-orange-100 mb-8 font-exo" style="text-shadow: 0 0 10px rgba(255,255,255,0.2);">
+                    Have a suggestion for a new AI tool? Want to collaborate? We'd love to hear from you!
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="mailto:contact@ogtools.com" class="contact-link bg-white/30 backdrop-blur-md px-6 py-3 rounded-xl text-white hover:bg-white/40 transition-colors font-exo">
+                        <i class="fas fa-envelope mr-2 animated-icon"></i>
+                       mpavankumar110405@gmail.com
+                    </a>
+                    <a href="https://twitter.com/ogtools" class="contact-link bg-white/30 backdrop-blur-md px-6 py-3 rounded-xl text-white hover:bg-white/40 transition-colors font-exo">
+                        <i class="fab fa-twitter mr-2 animated-icon"></i>
+                        @ogtools
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black/30 backdrop-blur-md text-white py-12 border-t border-white/30">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-14 h-14 bg-gradient-to-r from-orange-500 via-red-500 to-yellow-500 rounded-xl flex items-center justify-center animated-icon relative overflow-hidden">
+                            <div class="text-white font-bold text-lg font-orbitron" style="text-shadow: 0 0 10px rgba(255,255,255,0.5);">OGT</div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 opacity-50 animate-pulse"></div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold font-orbitron" style="text-shadow: 0 0 10px rgba(255,255,255,0.3);">OGtools</h3>
+                            <p class="text-sm text-orange-200 font-exo">Your Gateway to AI-Powered Learning</p>
+                        </div>
+                    </div>
+                    <p class="text-orange-200 mb-4 font-exo">
+                        Discover, explore, and master AI tools that transform how you learn, work, and create.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 font-orbitron">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-orange-200 hover:text-white transition-colors font-exo flex items-center">
+                            <i class="fas fa-home mr-2"></i>Home
+                        </a></li>
+                        <li><a href="#tools" class="text-orange-200 hover:text-white transition-colors font-exo flex items-center">
+                            <i class="fas fa-tools mr-2"></i>Tools
+                        </a></li>
+                        <li><a href="#categories" class="text-orange-200 hover:text-white transition-colors font-exo flex items-center">
+                            <i class="fas fa-th-large mr-2"></i>Categories
+                        </a></li>
+                        <li><a href="#about" class="text-orange-200 hover:text-white transition-colors font-exo flex items-center">
+                            <i class="fas fa-info-circle mr-2"></i>About
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 font-orbitron">Connect</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-orange-200 hover:text-white transition-colors font-exo flex items-center">
+                            <i class="fab fa-twitter mr-2"></i>Twitter
+                        </a></li>
+                        <li><a href="#" class="text-orange-200 hover:text-white transition-colors font-exo flex items-center">
+                            <i class="fab fa-linkedin mr-2"></i>LinkedIn
+                        </a></li>
+                        <li><a href="#" class="text-orange-200 hover:text-white transition-colors font-exo flex items-center">
+                            <i class="fab fa-github mr-2"></i>GitHub
+                        </a></li>
+                        <li><a href="#" class="text-orange-200 hover:text-white transition-colors font-exo flex items-center">
+                            <i class="fab fa-discord mr-2"></i>Discord
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/30 mt-8 pt-8 text-center">
+                <p class="text-orange-200 font-exo">
+                    &copy; <span id="year"></span> OGTools. All rights reserved. Made with ❤️ for students.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Logger Panel -->
+    <div id="logPanel" class="log-panel hidden">
+        <div class="log-panel-header">
+            <div class="text-sm font-semibold">Activity Log</div>
+            <button id="logToggle" class="text-xs px-2 py-1 rounded bg-gray-200 dark:bg-gray-700">Hide</button>
+        </div>
+        <div class="log-panel-body" id="logBody"></div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="btn btn-primary fixed bottom-8 right-8 w-12 h-12 rounded-full z-50 opacity-0 invisible transition-all duration-300 animated-icon">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Database Manager -->
+    <script src="database.js"></script>
+    
+    <!-- JavaScript -->
+    <script src="assets/js/app.js"></script>
+    
+    <!-- Custom Index Page Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Back to top button functionality
+            const backToTopBtn = document.getElementById('backToTop');
+            if (backToTopBtn) {
+                window.addEventListener('scroll', () => {
+                    if (window.pageYOffset > 300) {
+                        backToTopBtn.classList.remove('opacity-0', 'invisible');
+                        backToTopBtn.classList.add('opacity-100', 'visible');
+                    } else {
+                        backToTopBtn.classList.add('opacity-0', 'invisible');
+                        backToTopBtn.classList.remove('opacity-100', 'visible');
+                    }
+                });
+                
+                backToTopBtn.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            // Add hover effects to cards
+            document.querySelectorAll('.category-card, .feature-card, .stat-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Animate elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in');
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all sections
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+            
+            // Add click animations to buttons
+            document.querySelectorAll('button, .btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

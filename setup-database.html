@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OGtools - Database Setup</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .description {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .setup-button {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .setup-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+        
+        .setup-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .progress {
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .progress-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .progress-item:last-child {
+            border-bottom: none;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ff6b35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .checkmark {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .error-mark {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">OGT</div>
+        <h1 class="title">Database Setup</h1>
+        <p class="description">
+            This will initialize your Firebase database with OGTools data including categories, 
+            AI tools, and analytics structure. Make sure you have the correct Firebase project 
+            configured before proceeding.
+        </p>
+        
+        <button id="setupBtn" class="setup-button" onclick="setupDatabase()">
+            🚀 Initialize Database
+        </button>
+        
+        <button id="checkBtn" class="setup-button" onclick="checkDatabase()" style="background: linear-gradient(135deg, #28a745, #20c997);">
+            🔍 Check Database
+        </button>
+        
+        <div id="status" class="status" style="display: none;"></div>
+        
+        <div id="progress" class="progress" style="display: none;">
+            <div class="progress-item">
+                <span>Setting up categories...</span>
+                <span id="categories-status">⏳</span>
+            </div>
+            <div class="progress-item">
+                <span>Adding AI tools...</span>
+                <span id="tools-status">⏳</span>
+            </div>
+            <div class="progress-item">
+                <span>Initializing analytics...</span>
+                <span id="analytics-status">⏳</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, doc, setDoc, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AlzaSyCFaUobke7T2EXPhO-DYwC81B7MYHuu2_I",
+            authDomain: "ogtool-36ed2.firebaseapp.com",
+            projectId: "ogtool-36ed2",
+            storageBucket: "ogtool-36ed2.appspot.com",
+            messagingSenderId: "785065252249",
+            appId: "ogtool-36ed2"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Global functions
+        window.setupDatabase = async function() {
+            const setupBtn = document.getElementById('setupBtn');
+            const checkBtn = document.getElementById('checkBtn');
+            const status = document.getElementById('status');
+            const progress = document.getElementById('progress');
+            
+            setupBtn.disabled = true;
+            checkBtn.disabled = true;
+            progress.style.display = 'block';
+            status.style.display = 'none';
+            
+            try {
+                // Setup categories
+                document.getElementById('categories-status').innerHTML = '<div class="spinner"></div>';
+                await setupCategories();
+                document.getElementById('categories-status').innerHTML = '<span class="checkmark">✅</span>';
+                
+                // Setup tools
+                document.getElementById('tools-status').innerHTML = '<div class="spinner"></div>';
+                await setupTools();
+                document.getElementById('tools-status').innerHTML = '<span class="checkmark">✅</span>';
+                
+                // Setup analytics
+                document.getElementById('analytics-status').innerHTML = '<div class="spinner"></div>';
+                await setupAnalytics();
+                document.getElementById('analytics-status').innerHTML = '<span class="checkmark">✅</span>';
+                
+                status.className = 'status success';
+                status.innerHTML = '🎉 Database setup completed successfully! Your OGTools platform is ready to use.';
+                status.style.display = 'block';
+                
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML = `❌ Error setting up database: ${error.message}`;
+                status.style.display = 'block';
+            } finally {
+                setupBtn.disabled = false;
+                checkBtn.disabled = false;
+            }
+        };
+
+        window.checkDatabase = async function() {
+            const status = document.getElementById('status');
+            const progress = document.getElementById('progress');
+            
+            progress.style.display = 'none';
+            status.className = 'status info';
+            status.innerHTML = '🔍 Checking database...';
+            status.style.display = 'block';
+            
+            try {
+                // Check categories
+                const categoriesSnapshot = await getDocs(collection(db, 'categories'));
+                const categoriesCount = categoriesSnapshot.size;
+                
+                // Check tools
+                const toolsSnapshot = await getDocs(collection(db, 'tools'));
+                const toolsCount = toolsSnapshot.size;
+                
+                // Check analytics
+                const analyticsSnapshot = await getDocs(collection(db, 'analytics'));
+                const analyticsCount = analyticsSnapshot.size;
+                
+                status.className = 'status success';
+                status.innerHTML = `📊 Database Status:<br>
+                    Categories: ${categoriesCount}<br>
+                    Tools: ${toolsCount}<br>
+                    Analytics: ${analyticsCount}`;
+                status.style.display = 'block';
+                
+            } catch (error) {
+                status.className = 'status error';
+                status.innerHTML = `❌ Error checking database: ${error.message}`;
+                status.style.display = 'block';
+            }
+        };
+
+        // Setup functions
+        async function setupCategories() {
+            const categories = [
+                {
+                    id: 'education',
+                    name: 'Education',
+                    description: 'AI tools for learning, tutoring, research, and academic success',
+                    icon: 'fas fa-graduation-cap',
+                    color: '#3B82F6',
+                    toolCount: 8,
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'business',
+                    name: 'Business',
+                    description: 'AI solutions for business operations, marketing, and productivity',
+                    icon: 'fas fa-briefcase',
+                    color: '#10B981',
+                    toolCount: 6,
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'productivity',
+                    name: 'Productivity',
+                    description: 'AI-powered tools to boost efficiency and streamline workflows',
+                    icon: 'fas fa-tasks',
+                    color: '#F59E0B',
+                    toolCount: 5,
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'coding',
+                    name: 'Coding',
+                    description: 'AI assistants for programming, debugging, and code generation',
+                    icon: 'fas fa-code',
+                    color: '#EF4444',
+                    toolCount: 4,
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'design',
+                    name: 'Design',
+                    description: 'AI tools for graphic design, presentations, and visual content',
+                    icon: 'fas fa-palette',
+                    color: '#8B5CF6',
+                    toolCount: 3,
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'research',
+                    name: 'Research',
+                    description: 'AI-powered research tools for data analysis and insights',
+                    icon: 'fas fa-search',
+                    color: '#06B6D4',
+                    toolCount: 2,
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+            ];
+
+            for (const category of categories) {
+                await setDoc(doc(db, 'categories', category.id), category);
+            }
+        }
+
+        async function setupTools() {
+            const tools = [
+                // Education Tools
+                {
+                    id: 'quillbot',
+                    name: 'QuillBot',
+                    description: 'AI-powered writing assistant for paraphrasing, grammar checking, and content improvement',
+                    category: 'education',
+                    url: 'https://quillbot.com',
+                    icon: 'https://logo.clearbit.com/quillbot.com',
+                    rating: 4.8,
+                    price: 'Freemium',
+                    features: ['Paraphrasing', 'Grammar Check', 'Summarizer', 'Citation Generator'],
+                    tags: ['writing', 'grammar', 'academic', 'paraphrasing'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'khan-academy-ai',
+                    name: 'Khan Academy AI',
+                    description: 'Personalized learning platform with AI tutors for various subjects',
+                    category: 'education',
+                    url: 'https://khanacademy.org',
+                    icon: 'https://logo.clearbit.com/khanacademy.org',
+                    rating: 4.9,
+                    price: 'Free',
+                    features: ['Personalized Learning', 'AI Tutoring', 'Progress Tracking', 'Multiple Subjects'],
+                    tags: ['learning', 'tutoring', 'math', 'science'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'gradescope',
+                    name: 'Gradescope',
+                    description: 'AI-powered grading and feedback system for educators',
+                    category: 'education',
+                    url: 'https://gradescope.com',
+                    icon: 'https://logo.clearbit.com/gradescope.com',
+                    rating: 4.6,
+                    price: 'Paid',
+                    features: ['Auto Grading', 'Rubric Creation', 'Analytics', 'Student Feedback'],
+                    tags: ['grading', 'education', 'assessment', 'feedback'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'photomath',
+                    name: 'Photomath',
+                    description: 'AI-powered math solver that scans and solves problems step-by-step',
+                    category: 'education',
+                    url: 'https://photomath.com',
+                    icon: 'https://logo.clearbit.com/photomath.com',
+                    rating: 4.7,
+                    price: 'Freemium',
+                    features: ['Math Solver', 'Step-by-step Solutions', 'Graphing', 'Multiple Languages'],
+                    tags: ['math', 'solver', 'homework', 'step-by-step'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'socratic',
+                    name: 'Socratic',
+                    description: 'AI-powered homework helper that provides explanations and resources',
+                    category: 'education',
+                    url: 'https://socratic.org',
+                    icon: 'https://logo.clearbit.com/socratic.org',
+                    rating: 4.5,
+                    price: 'Free',
+                    features: ['Homework Help', 'Visual Explanations', 'Multiple Subjects', 'Study Guides'],
+                    tags: ['homework', 'study', 'explanations', 'multisubject'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'duolingo',
+                    name: 'Duolingo',
+                    description: 'AI-powered language learning platform with personalized lessons',
+                    category: 'education',
+                    url: 'https://duolingo.com',
+                    icon: 'https://logo.clearbit.com/duolingo.com',
+                    rating: 4.8,
+                    price: 'Freemium',
+                    features: ['Language Learning', 'Gamification', 'Speech Recognition', 'Progress Tracking'],
+                    tags: ['language', 'learning', 'gamification', 'multilingual'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'wolfram-alpha',
+                    name: 'Wolfram Alpha',
+                    description: 'Computational knowledge engine for math, science, and general knowledge',
+                    category: 'education',
+                    url: 'https://wolframalpha.com',
+                    icon: 'https://logo.clearbit.com/wolframalpha.com',
+                    rating: 4.9,
+                    price: 'Freemium',
+                    features: ['Computational Engine', 'Step-by-step Solutions', 'Data Analysis', 'Visualizations'],
+                    tags: ['math', 'science', 'computation', 'data'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'otter-ai',
+                    name: 'Otter.ai',
+                    description: 'AI-powered transcription and note-taking for lectures and meetings',
+                    category: 'education',
+                    url: 'https://otter.ai',
+                    icon: 'https://logo.clearbit.com/otter.ai',
+                    rating: 4.6,
+                    price: 'Freemium',
+                    features: ['Live Transcription', 'Speaker Identification', 'Searchable Notes', 'Integration'],
+                    tags: ['transcription', 'notes', 'lectures', 'meetings'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                // Business Tools
+                {
+                    id: 'chatgpt',
+                    name: 'ChatGPT',
+                    description: 'Advanced AI chatbot for business communication and content creation',
+                    category: 'business',
+                    url: 'https://chat.openai.com',
+                    icon: 'https://logo.clearbit.com/openai.com',
+                    rating: 4.9,
+                    price: 'Freemium',
+                    features: ['Conversational AI', 'Content Generation', 'Code Writing', 'Analysis'],
+                    tags: ['chatbot', 'content', 'business', 'productivity'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'notion-ai',
+                    name: 'Notion AI',
+                    description: 'AI-powered workspace for notes, docs, and project management',
+                    category: 'business',
+                    url: 'https://notion.so',
+                    icon: 'https://logo.clearbit.com/notion.so',
+                    rating: 4.7,
+                    price: 'Freemium',
+                    features: ['Note Taking', 'Project Management', 'AI Writing', 'Collaboration'],
+                    tags: ['notes', 'productivity', 'collaboration', 'management'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'canva-ai',
+                    name: 'Canva AI',
+                    description: 'AI-powered design platform for creating professional graphics and presentations',
+                    category: 'business',
+                    url: 'https://canva.com',
+                    icon: 'https://logo.clearbit.com/canva.com',
+                    rating: 4.8,
+                    price: 'Freemium',
+                    features: ['Design Templates', 'AI Image Generation', 'Brand Kit', 'Collaboration'],
+                    tags: ['design', 'graphics', 'presentations', 'branding'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'hugging-face',
+                    name: 'Hugging Face',
+                    description: 'AI model hub and platform for machine learning and NLP applications',
+                    category: 'business',
+                    url: 'https://huggingface.co',
+                    icon: 'https://logo.clearbit.com/huggingface.co',
+                    rating: 4.9,
+                    price: 'Freemium',
+                    features: ['Model Hub', 'NLP Tools', 'API Access', 'Community'],
+                    tags: ['ml', 'nlp', 'models', 'api'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'zapier-ai',
+                    name: 'Zapier AI',
+                    description: 'AI-powered automation platform for connecting apps and workflows',
+                    category: 'business',
+                    url: 'https://zapier.com',
+                    icon: 'https://logo.clearbit.com/zapier.com',
+                    rating: 4.6,
+                    price: 'Freemium',
+                    features: ['Workflow Automation', 'App Integration', 'AI Actions', 'Triggers'],
+                    tags: ['automation', 'workflow', 'integration', 'productivity'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                },
+                {
+                    id: 'grammarly',
+                    name: 'Grammarly',
+                    description: 'AI-powered writing assistant for grammar, style, and tone improvement',
+                    category: 'business',
+                    url: 'https://grammarly.com',
+                    icon: 'https://logo.clearbit.com/grammarly.com',
+                    rating: 4.8,
+                    price: 'Freemium',
+                    features: ['Grammar Check', 'Style Suggestions', 'Tone Detection', 'Plagiarism Check'],
+                    tags: ['writing', 'grammar', 'style', 'communication'],
+                    isActive: true,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+            ];
+
+            for (const tool of tools) {
+                await setDoc(doc(db, 'tools', tool.id), tool);
+            }
+        }
+
+        async function setupAnalytics() {
+            const analyticsData = {
+                totalUsers: 0,
+                totalToolViews: 0,
+                totalSearches: 0,
+                popularTools: [],
+                categoryStats: {},
+                lastUpdated: new Date()
+            };
+
+            await setDoc(doc(db, 'analytics', 'overview'), analyticsData);
+        }
+    </script>
+</body>
+</html>
